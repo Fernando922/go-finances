@@ -1,4 +1,3 @@
-// import original module declarations
 import 'styled-components';
 import theme from './theme';
 
