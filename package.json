@@ -1,12 +1,5 @@
 {
   "main": "index.js",
-  "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "web": "expo start --web",
-    "start": "react-native start",
-    "test": "jest"
-  },
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.0",
     "expo": "~41.0.1",
@@ -39,5 +32,12 @@
   "jest": {
     "preset": "react-native"
   },
-  "private": true
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "web": "expo start --web",
+    "start": "react-native start",
+    "test": "jest"
+  }
 }
