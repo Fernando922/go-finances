@@ -8,7 +8,7 @@ interface Props extends RectButtonProps {
 
 import { Container, Title } from "./styles";
 
-export function Button({ title, ...rest }: Props) {
+export function Button({ title, onPress, ...rest }: Props) {
   return (
     <Container {...rest} onPress={onPress}>
       <Title>{title}</Title>
