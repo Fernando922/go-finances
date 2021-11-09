@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Keyboard, TouchableWithoutFeedback, Alert } from "react-native";
 import { Button } from "../../components/Forms/Button";
 import { InputForm } from "../../components/Forms/InputForm";
@@ -8,6 +8,9 @@ import { Modal } from "react-native";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import uuid from "react-native-uuid";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   Container,
@@ -23,6 +26,10 @@ interface FormData {
   name: string;
   amount: string;
 }
+
+type NavigationProps = {
+  navigate: (screen: string) => void;
+};
 
 const schema = Yup.object().shape({
   name: Yup.string().required("Nome é obrigatório"),
@@ -40,9 +47,13 @@ export function Register() {
     name: "Categoria",
   });
 
+  const dataKey = "@gofinnance:transactions";
+  const navigation = useNavigation<NavigationProps>();
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -60,7 +71,7 @@ export function Register() {
     setCategoryModalOpen(false);
   }
 
-  function handleRegister(form: FormData) {
+  async function handleRegister(form: FormData) {
     if (!transactionType) {
       return Alert.alert("Selecione o tipo da transação");
     }
@@ -69,22 +80,51 @@ export function Register() {
       return Alert.alert("Selecione a categoria");
     }
 
-    const data = {
+    const newTrasaction = {
+      id: String(uuid.v4()),
       name: form.name,
       amount: form.amount,
       transactionType,
       category: category.key,
+      date: new Date(),
     };
 
-    console.log(data);
+    try {
+      const data = await AsyncStorage.getItem(dataKey);
+      const currentData = data ? JSON.parse(data) : [];
+
+      const dataFormatted = [...currentData, newTrasaction];
+
+      await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted));
+
+      setTransactionType("");
+      setCategory({
+        key: "category",
+        name: "Categoria",
+      });
+      reset();
+      navigation.navigate("Listagem");
+    } catch (e) {
+      console.log(e);
+      Alert.alert("Não foi possível salvar");
+    }
   }
 
-  function hideOpenedKeyboar() {
+  function hideOpenedKeyboard() {
     Keyboard.dismiss();
   }
 
+  useEffect(() => {
+    async function loadData() {
+      const data = await AsyncStorage.getItem(dataKey);
+      console.log(JSON.parse(data!)); //exclamação é pra forçar que nunca será nulo
+    }
+
+    loadData();
+  }, []);
+
   return (
-    <TouchableWithoutFeedback onPress={hideOpenedKeyboar}>
+    <TouchableWithoutFeedback onPress={hideOpenedKeyboard}>
       <Container>
         <Header>
           <Title>Cadastro</Title>
