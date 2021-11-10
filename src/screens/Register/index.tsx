@@ -47,8 +47,7 @@ export function Register() {
     name: "Categoria",
   });
 
-  const dataKey = "@gofinnance:transactions";
-  const navigation = useNavigation<NavigationProps>();
+  const { navigate } = useNavigation<NavigationProps>();
 
   const {
     control,
@@ -59,7 +58,7 @@ export function Register() {
     resolver: yupResolver(schema),
   });
 
-  function handleTransactionTypeSelect(type: "up" | "down") {
+  function handleTransactionTypeSelect(type: "positive" | "negative") {
     setTransactionType(type);
   }
 
@@ -72,6 +71,8 @@ export function Register() {
   }
 
   async function handleRegister(form: FormData) {
+    const dataKey = "@gofinnance:transactions";
+
     if (!transactionType) {
       return Alert.alert("Selecione o tipo da transação");
     }
@@ -84,9 +85,9 @@ export function Register() {
       id: String(uuid.v4()),
       name: form.name,
       amount: form.amount,
-      transactionType,
+      type: transactionType,
       category: category.key,
-      date: new Date(),
+      date: new Date().toISOString(),
     };
 
     try {
@@ -103,7 +104,7 @@ export function Register() {
         name: "Categoria",
       });
       reset();
-      navigation.navigate("Listagem");
+      navigate("Listagem");
     } catch (e) {
       console.log(e);
       Alert.alert("Não foi possível salvar");
@@ -113,15 +114,6 @@ export function Register() {
   function hideOpenedKeyboard() {
     Keyboard.dismiss();
   }
-
-  useEffect(() => {
-    async function loadData() {
-      const data = await AsyncStorage.getItem(dataKey);
-      console.log(JSON.parse(data!)); //exclamação é pra forçar que nunca será nulo
-    }
-
-    loadData();
-  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={hideOpenedKeyboard}>
@@ -151,14 +143,14 @@ export function Register() {
               <TransactionTypeButton
                 type="up"
                 title="Income"
-                onPress={() => handleTransactionTypeSelect("up")}
-                isActive={transactionType === "up"}
+                onPress={() => handleTransactionTypeSelect("positive")}
+                isActive={transactionType === "positive"}
               />
               <TransactionTypeButton
                 type="down"
                 title="Outcome"
-                onPress={() => handleTransactionTypeSelect("down")}
-                isActive={transactionType === "down"}
+                onPress={() => handleTransactionTypeSelect("negative")}
+                isActive={transactionType === "negative"}
               />
             </TransactionTypes>
             <CategorySelectButton
