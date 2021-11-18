@@ -56,6 +56,8 @@ export function Dashboard() {
     collection: DataListProps[],
     type: "positive" | "negative"
   ) {
+    //BUG
+
     const lastTransaction = new Date(
       Math.max.apply(
         Math,

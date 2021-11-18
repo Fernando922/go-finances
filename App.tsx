@@ -2,9 +2,9 @@ import React from "react";
 import AppLoading from "expo-app-loading";
 import { ThemeProvider } from "styled-components";
 import theme from "./src/global/styles/theme";
-import { Register } from "./src/screens/Register";
 import "intl";
 import "intl/locale-data/jsonp/pt-BR";
+import { StatusBar } from "react-native";
 
 import {
   useFonts,
@@ -30,6 +30,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <NavigationContainer>
+        <StatusBar barStyle="light-content" />
         <AppRoutes />
       </NavigationContainer>
     </ThemeProvider>
