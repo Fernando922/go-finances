@@ -170,8 +170,8 @@ export function Dashboard() {
               <UserInfo>
                 <Photo source={{ uri: "https://github.com/Fernando922.png" }} />
                 <User>
-                  <UserGreeting>Olá</UserGreeting>
-                  <UserName>Fernando</UserName>
+                  <UserGreeting>Olá,</UserGreeting>
+                  <UserName>Fernando!</UserName>
                 </User>
               </UserInfo>
               <LogoutButton onPress={handleReset}>
