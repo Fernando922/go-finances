@@ -12,12 +12,16 @@ import {
 
 import { RFValue } from "react-native-responsive-fontsize";
 
+import { useAuth } from "../../hooks/auth";
 import AppleSvg from "../../assets/apple-icon.svg";
-import GoogleSvg from "../../assets/google-icon.svg";
 import LogoSvg from "../../assets/finance-icon.svg";
+import GoogleSvg from "../../assets/google-icon.svg";
 import { SignInSocialButton } from "../../components/SignInSocialButton";
 
 export function SignIn() {
+  const { user } = useAuth();
+  console.log(user);
+
   return (
     <Container>
       <Header>
