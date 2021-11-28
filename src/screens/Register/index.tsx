@@ -21,6 +21,7 @@ import {
   TransactionTypes,
 } from "./styles";
 import { CategorySelect } from "../CategorySelect";
+import { useAuth } from "../../hooks/auth";
 
 interface FormData {
   name: string;
@@ -48,6 +49,7 @@ export function Register() {
   });
 
   const { navigate } = useNavigation<NavigationProps>();
+  const { user } = useAuth();
 
   const {
     control,
@@ -71,7 +73,7 @@ export function Register() {
   }
 
   async function handleRegister(form: FormData) {
-    const dataKey = "@gofinnance:transactions";
+    const dataKey = `@gofinnance:transactions_user:${user.id}`;
 
     if (!transactionType) {
       return Alert.alert("Selecione o tipo da transação");

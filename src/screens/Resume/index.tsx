@@ -22,6 +22,7 @@ import { useTheme } from "styled-components";
 import { subMonths, addMonths, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ActivityIndicator } from "react-native";
+import { useAuth } from "../../hooks/auth";
 
 interface TransactionData {
   type: "positive" | "negative";
@@ -48,6 +49,9 @@ export function Resume() {
   );
 
   const { colors } = useTheme();
+  const {
+    user: { id },
+  } = useAuth();
   const bottomBarSize = useBottomTabBarHeight();
 
   function handleDateChange(action: "next" | "prev") {
@@ -60,7 +64,7 @@ export function Resume() {
   }
 
   async function loadData() {
-    const dataKey = "@gofinnance:transactions";
+    const dataKey = `@gofinnance:transactions_user:${id}`;
     const response = await AsyncStorage.getItem(dataKey);
     const responseFormatted = response ? JSON.parse(response) : [];
 

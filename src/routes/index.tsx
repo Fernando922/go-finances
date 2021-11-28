@@ -6,11 +6,7 @@ import { AuthRoutes } from "./auth.routes";
 import { AppRoutes } from "./app.routes";
 
 function Routes() {
-  const { user, userStorageLoading } = useAuth();
-
-  if (userStorageLoading) {
-    return null;
-  }
+  const { user } = useAuth();
 
   return (
     <NavigationContainer>
